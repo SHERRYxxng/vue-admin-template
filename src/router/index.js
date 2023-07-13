@@ -51,9 +51,117 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '尚医通后台系统', icon: 'el-icon-shopping-cart-2' }
     }]
   },
+
+  //一组路由（父+子路由）
+  {
+    path: '/hosp', //父路由的路径
+    component: Layout,//右侧的布局组件
+    redirect: '/hosp/hospsetlist',//该父路由路径对应的重定向的路径（自动重定向到第一个路由）
+    name: 'hosp',//自定义的路由菜单名称（保持唯一即可）
+
+    //父菜单的元信息（标题+图标）  显示
+    meta: { title: '医院管理', icon: 'el-icon-office-building' },
+
+    //子菜单
+    children: [
+      {
+        path: 'hospsetlist',//子路由的路径（注意：一个子路由完整的path=父path+子path）
+        name: 'hospsetlist',
+        // @/views指的是 src/views/    list.vue 后缀不用写
+        component: () => import('@/views/yygh/hospset/list'),//该路由对应的视图组件（右侧显示），是一个.vue文件
+        meta: { title: '医院设置列表', icon: 'table' }//子路由的标题和图标
+      },
+      {
+        path: 'add',
+        name: 'add',
+        component: () => import('@/views/yygh/hospset/form'),//表单，用于添加医院设置
+        meta: { title: '开通医院设置', icon: 'el-icon-folder-add' }
+      },
+      //不需要显示，隐藏掉
+      //为该路由的path，声明一个参数(:id  形式参数名)
+      {
+        path: 'edit/:id',
+        name: 'edit',
+        component: () => import('@/views/yygh/hospset/form'),//表单，用于回显医院设置
+        meta: { title: '回显医院设置', icon: 'el-icon-folder-add' },
+        hidden:true
+      },
+      {
+        path: 'hosplist',
+        name: 'hosplist',
+        component: () => import('@/views/yygh/hospital/list'),//表单，用于回显医院设置
+        meta: { title: '医院列表', icon: 'el-icon-ship' }
+      },
+      {
+        path: 'hospdetail/:id',
+        name: 'hospdetail',
+        component: () => import('@/views/yygh/hospital/show'),
+        meta: { title: '医院详情', icon: 'el-icon-ship' },
+        hidden:true
+      },
+      {
+        path: 'schedule/:hoscode',
+        name: 'schedule',
+        component: () => import('@/views/yygh/hospital/schedule'),
+        meta: { title: '医院排班', icon: 'el-icon-ship' },
+        hidden:true
+      }
+    ]
+  },
+
+  // 数据字典管理菜单路由
+  {
+    path: '/cmn',
+    component: Layout,
+    redirect: '/cmn/list',
+    name: 'cmn',
+    meta: { title: '数据字典管理', icon: 'el-icon-s-help' },
+    alwaysShow: true,
+    children: [
+      // 子菜单
+      {
+        path: 'list',
+        name: 'cmnlist',
+        component: () => import('@/views/yygh/cmn/list'),
+        meta: { title: '数据字典列表', icon: 'table' }
+      }
+    ]
+  },
+
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/list',
+    name: 'user',
+    meta: { title: '用户管理', icon: 'el-icon-s-help' },
+    alwaysShow: true,
+    children: [
+      // 子菜单
+      {
+        path: 'list',
+        name: 'userlist',
+        component: () => import('@/views/yygh/user/list'),
+        meta: { title: '用户列表', icon: 'table' }
+      },
+      {
+        path: 'authlist',
+        name: 'authlist',
+        component: () => import('@/views/yygh/user/authlist'),
+        meta: { title: '认证列表', icon: 'table' }
+      },
+      {
+        path: 'show/:id',
+        name: 'show',
+        component: () => import('@/views/yygh/user/show'),
+        meta: { title: '查看用户详情', icon: 'table' },
+        hidden:true
+      }
+    ]
+  },
+
 
   {
     path: '/example',
@@ -77,88 +185,6 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
